@@ -9,6 +9,7 @@ interface IAccountState {
 interface IPricesState {
    loading: boolean
    currentPrices: ICurrentPrice[]
+   currentPricesMap: { [key: string]: ICurrentPrice }
 }
 
 

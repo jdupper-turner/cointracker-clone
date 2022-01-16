@@ -4,7 +4,8 @@ import { GetCurrentPrices } from './pricesAPI';
 
 const initialState: IPricesState = {
    loading: false,
-   currentPrices: []
+   currentPrices: [],
+   currentPricesMap: {}
 };
 
 export const accountSlice = createSlice({
@@ -34,6 +35,10 @@ export const accountSlice = createSlice({
             }));
 
             state.currentPrices = alphabetizePrices(currentPrices);
+            state.currentPrices.forEach((price: ICurrentPrice) => {
+               state.currentPricesMap[price.symbol] = price;
+            });
+
             state.loading = false;
          });
    }
@@ -50,11 +55,11 @@ export const getCurrentPricesAsync = createAsyncThunk(
 
 const alphabetizePrices = (prices: ICurrentPrice[]): ICurrentPrice[] => {
    return prices.sort((p1, p2) => {
-      const p1Caps = p1.name.toUpperCase();
-      const p2Caps = p2.name.toUpperCase();
+      const p1Caps = p1.symbol.toUpperCase();
+      const p2Caps = p2.symbol.toUpperCase();
 
-      if (p1Caps < p2Caps) return -1;
-      if (p1Caps > p2Caps) return 1;
+      if (p1Caps[0] < p2Caps[0]) return -1;
+      if (p1Caps[0] > p2Caps[0]) return 1;
       return 0;
    });
 };
